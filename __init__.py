@@ -1,16 +1,29 @@
 from tabulate import tabulate
+import pandas as pd
 
 
 def main():
+
+    course_df = pd.read_csv('course.csv', index_col=False, header=0);
+    instructor_df = pd.read_csv('instructor.csv', index_col=False, header=0);
+
     while True:
+        print("**************************************************************")
+        print()
+        print()
+        print('                   Welcome to Course Box!                     ')
+        print()
         print()
         print("**************************************************************")
+        print()
         print("Please select the function number you need:")
+        print()
         print("1. Look up courses by course code.")
-        print("2. Look up courses by school code.")
-        print("3. Look up courses by instructor.")
-        print("4. Look up courses by course score.")
-        print("5. Quit.")
+        print("2. Browse courses by school.")
+        print("3. Search courses by keyword")
+        print("4. Search for instructors")
+        print("5. Help.")
+        print("6. Quit.")
         print("**************************************************************")
 
         num = input()
@@ -21,10 +34,12 @@ def main():
         elif num == '2':
             school_code()
         elif num == '3':
-            instructor()
+            keyword()
         elif num == '4':
-            course_score()
+            instructor()
         elif num == '5':
+            get_help()
+        elif num == '6':
             print("Thanks!")
             break
         else:
