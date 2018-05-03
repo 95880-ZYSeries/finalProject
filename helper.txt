@@ -1,0 +1,26 @@
+
+Hi. We are ZYSeries. Welcome to Course Box!
+Course Box is a console based application that helps CMU students to select courses.
+
+The main functions we have:
+
+1. Look up courses by course code.
+By entering course code, this function will find out the corresponding course and its information.
+
+2. Browse courses by school.
+With the school code, this function will give a list of courses opened in this school.
+The courses in this list are ranked by course score.
+
+3. Search courses by keyword
+By entering partial course name, this function gives a list of courses which contains this keyword.
+The courses in this list are ranked by course score.
+
+4. Search for instructors
+By entering the name of instructor, this function gives a list of matched instructors.
+The instructors in this list are ranked by instructor score.
+
+5. Help
+Introduction & Help.
+
+6. Quit
+Leave this application.

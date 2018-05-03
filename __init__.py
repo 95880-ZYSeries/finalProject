@@ -1,12 +1,16 @@
 from tabulate import tabulate
 import pandas as pd
-import sys
-import course_search as cs
+from search_instructor import search_instr
+from course_search import search_course_by_code, search_course_by_school_code, search_course_by_course_name
 
-course_df = pd.read_csv('course.csv', index_col=False, header=0);
-instructor_df = pd.read_csv('instructor.csv', index_col=False, header=0);
+
 def main():
+
+    course_df = pd.read_csv('course.csv', index_col=None, header=0);
+    instructor_df = pd.read_csv('instructor.csv', index_col=None, header=0);
+
     while True:
+        print()
         print("**************************************************************")
         print()
         print()
@@ -29,90 +33,100 @@ def main():
         while not num.isdigit():
             num = input("Please enter a correct number: ")
         if num == '1':
-            course_code()
+            course_code(course_df)
         elif num == '2':
-            school_code()
+            school_code(course_df)
         elif num == '3':
-            keyword()
+            course_name(course_df)
         elif num == '4':
-            instructor()
+            instructor(instructor_df)
         elif num == '5':
             get_help()
         elif num == '6':
             print("Thanks!")
             break
         else:
-            print("Not Found.")
+            print()
+            print("Sorry! We don't have the function number you entered.")
 
 
-def course_code():
+def course_code(course_df):
     try:
         code = input("Please enter a five-digit course code: ")
-        if len(code) != 5:
+        if not code.isdigit():
             print('Invalid course code')
+            course_code(course_df)
         else:
-            res = cs.search_course_by_code(code, course_df)
-            if len(res)==0:
-                print("No course matches your search, please try again")
-            else:
-                print(tabulate(res))
+            df = search_course_by_code(code, course_df)
+            if len(df) == 0:
+                print()
+                print("Sorry! We cannot find this course.")
+                return
+            print(tabulate(df, headers='keys', tablefmt='psql'))
     except Exception:
-        print("Error")
-        course_code()
-        
+        course_code(course_df)
 
-def school_code():
+
+def school_code(course_df):
     try:
-        school_code = input("Please enter a two-digit school code: ")
-        if len(school_code) != 2:
+        code = input("Please enter a two-digit school code: ")
+        level = input("Please enter your level(U for undergraduate, G for graduate):")
+        if (len(code) != 2) or (not code.isdigit()):
             print('Invalid school code')
+            school_code(course_df)
             return
-        print("please enter the course level: ")
-        course_level = input("U for undergraduate classes/G for graduate classes: ")
-        if course_level!='U' and course_level!='G':
-            print("Invalid level")
+        if level != 'U' and level != 'G':
+            print('Invalid level')
+            school_code(course_df)
             return
         else:
-            res = cs.search_course_by_school_code(school_code, course_level, course_df)
-            if len(res)==0:
-                print("No course matches your search, please try again")
-            else:
-                print(tabulate(res))
+            df = search_course_by_school_code(code, level, course_df)
+            if len(df) == 0:
+                print()
+                print("Sorry! We cannot find course in this condition.")
+                return
+        print(tabulate(df, headers='keys', tablefmt='psql'))
     except Exception:
-        school_code()
+        school_code(course_df)
 
 
-def instructor():
+def course_name(course_df):
     try:
-        code = input("Please enter the name of an instructor: ")
-
-        print(tabulate([['95880', 'Python for Developer', 'Kolowitz, Brian'],
-                        ['95888', 'Data Focused Python', 'Kolowitz, Brian'],
-                        ['33331', 'Physical Mechanics I', 'Quinn, Brian']], headers=['Code', 'Name', 'Instructor'], tablefmt='orgtbl'))
+        name = input("Please enter a keyword of course name: ")
+        df = search_course_by_course_name(name, course_df)
+        if len(df) == 0:
+            print()
+            print("Sorry! We cannot find the course with this keyword.")
+            return
+        print(tabulate(df, headers='keys', tablefmt='psql'))
     except Exception:
-        instructor()
+        course_name(course_df)
 
-def keyword():
+
+def instructor(instructor_df):
     try:
-        course_name = input("please enter the course name: ")
-        res = cs.search_course_by_course_name(course_name, course_df)
-        if len(res)==0:
-            print("No course matches your search, please try again")
-        else:
-            print(tabulate(res))
+        name = input("Please enter the name of an instructor: ")
+        df = search_instr(instructor_df, name)
+        if len(df) == 0:
+            print()
+            print("Sorry! We cannot find the instructor.")
+            return
+        print(tabulate(df, headers='keys', tablefmt='psql'))
+
     except Exception:
-        keyword()
+        search_instr(instructor_df)
 
-def course_score():
-    try:
-        score = input("Please enter the target course score: ")
-        float(score)
-        print(tabulate([['95880', 'Python for Developer', 'Kolowitz, Brian', 4.2],
-                        ['95888', 'Data Focused Python', 'Kolowitz, Brian', 4.0],
-                        ['33331', 'Physical Mechanics I', 'Quinn, Brian', 3.6]], headers=['Code', 'Name', 'Instructor', 'Score'], tablefmt='orgtbl'))
-    except ValueError:
-        print("Score not valid.")
-        course_score()
+
+def get_help():
+    print("**********************************************************************************************************")
+    print()
+    print('                                                   Help                                                   ')
+    print()
+    print("**********************************************************************************************************")
+    help_file = open('helper.txt', 'r')
+    text = help_file.read()
+    print(text)
+
 
 
 if __name__ == "__main__":
