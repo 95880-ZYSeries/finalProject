@@ -1,12 +1,11 @@
 from tabulate import tabulate
 import pandas as pd
+import sys
+import course_search as cs
 
-
+course_df = pd.read_csv('course.csv', index_col=False, header=0);
+instructor_df = pd.read_csv('instructor.csv', index_col=False, header=0);
 def main():
-
-    course_df = pd.read_csv('course.csv', index_col=False, header=0);
-    instructor_df = pd.read_csv('instructor.csv', index_col=False, header=0);
-
     while True:
         print("**************************************************************")
         print()
@@ -51,23 +50,34 @@ def course_code():
         code = input("Please enter a five-digit course code: ")
         if len(code) != 5:
             print('Invalid course code')
-            course_code()
         else:
-            print(tabulate([['95880', 'Python for Developer', 'Kolowitz, Brian']], headers=['Code', 'Name', 'Instructor'], tablefmt='orgtbl'))
+            res = cs.search_course_by_code(code, course_df)
+            if len(res)==0:
+                print("No course matches your search, please try again")
+            else:
+                print(tabulate(res))
     except Exception:
+        print("Error")
         course_code()
-
+        
 
 def school_code():
     try:
-        code = input("Please enter a two-digit school code: ")
-        if len(code) != 2:
+        school_code = input("Please enter a two-digit school code: ")
+        if len(school_code) != 2:
             print('Invalid school code')
-            school_code()
+            return
+        print("please enter the course level: ")
+        course_level = input("U for undergraduate classes/G for graduate classes: ")
+        if course_level!='U' and course_level!='G':
+            print("Invalid level")
+            return
         else:
-            print(tabulate([['95880', 'Python for Developer', 'Kolowitz, Brian'],
-                            ['95881', 'Web Application Development', 'Bigrigg, Michael'],
-                            ['95883', 'Ethical Penetration Testing', 'Cook, Michael']], headers=['Code', 'Name', 'Instructor'], tablefmt='orgtbl'))
+            res = cs.search_course_by_school_code(school_code, course_level, course_df)
+            if len(res)==0:
+                print("No course matches your search, please try again")
+            else:
+                print(tabulate(res))
     except Exception:
         school_code()
 
@@ -82,6 +92,16 @@ def instructor():
     except Exception:
         instructor()
 
+def keyword():
+    try:
+        course_name = input("please enter the course name: ")
+        res = cs.search_course_by_course_name(course_name, course_df)
+        if len(res)==0:
+            print("No course matches your search, please try again")
+        else:
+            print(tabulate(res))
+    except Exception:
+        keyword()
 
 def course_score():
     try:
