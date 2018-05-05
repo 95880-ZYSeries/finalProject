@@ -1,5 +1,2 @@
-Requirements
-
-Packages:
-1. pandas
-2. tabulate
+pandas
+tabulate
