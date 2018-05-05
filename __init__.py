@@ -49,8 +49,12 @@ def main():
             print()
             print("Sorry! We don't have the function number you entered.")
 
-
+#let the user enter the course number they want to search and return the relavant course
 def course_code(course_df):
+    '''
+        Arguments:
+            course_df: {DataFrame} - a DataFrame contains all course info
+    '''
     try:
         code = input("Please enter a five-digit course code: ")
         if not code.isdigit():
@@ -66,8 +70,12 @@ def course_code(course_df):
     except Exception:
         course_code(course_df)
 
-
+#let the user enter the school code and course_level they want to search and return the relavent course
 def school_code(course_df):
+    '''
+        Arguments:
+            course_df: {DataFrame} - a DataFrame contains all course info
+    '''
     try:
         code = input("Please enter a two-digit school code: ")
         level = input("Please enter your level(U for undergraduate, G for graduate):")
@@ -81,7 +89,7 @@ def school_code(course_df):
             return
         else:
             df = search_course_by_school_code(code, level, course_df)
-            if len(df) == 0:
+            if df is None or len(df) == 0:
                 print()
                 print("Sorry! We cannot find course in this condition.")
                 return
@@ -89,12 +97,16 @@ def school_code(course_df):
     except Exception:
         school_code(course_df)
 
-
+#let the user enter the topic they want to search and return the relavent course
 def course_name(course_df):
+    '''
+        Arguments:
+            course_df: {DataFrame} - a DataFrame contains all course info
+    '''
     try:
         name = input("Please enter a keyword of course name: ")
         df = search_course_by_course_name(name, course_df)
-        if len(df) == 0:
+        if df is None or len(df) == 0:
             print()
             print("Sorry! We cannot find the course with this keyword.")
             return
