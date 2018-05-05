@@ -8,7 +8,7 @@ def search_course_by_code(course_code, course_df):
         course_df: {DataFrame} -- a dataframe of all information.
 
     Returns:
-        DataFrame - a DataFrame contains the relavent information of the relevant course_code
+        DataFrame - a DataFrame contains the relevant information of the relevant course_code
     """
     course_code = int(course_code)
     return course_df[course_df.course_number==course_code]
@@ -22,7 +22,7 @@ def search_course_by_school_code(school_code, level, course_df):
         course_df: {DataFrame} -- a dataframe of all information.
 
     Returns:
-        DataFrame - a DataFrame contains the relavent information of the relevant course_code
+        DataFrame - a DataFrame contains the relevant information of the relevant course_code
 
     """
     school_code = int(school_code)
